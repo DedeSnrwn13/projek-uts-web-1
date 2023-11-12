@@ -60,45 +60,65 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Category  $ctageory
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $ctageory)
+    public function show(Category $category)
     {
-        //
+        return view('backend.modules.category.show', compact('category'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Category  $ctageory
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $ctageory)
+    public function edit(Category $category)
     {
-        //
+        return view('backend.modules.category.edit', compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Category  $ctageory
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $ctageory)
+    public function update(Request $request, Category $category)
     {
-        //
+        $this->validate($request, [
+            'name'=> 'required|min:3|max:255',
+            'slug' => 'required|min:3|max:255|unique:categories,slug,' . $category->id,
+            'order_by' => 'required|numeric',
+            'status' => 'required'
+        ]);
+
+        $categoty_data = $request->all();
+        $categoty_data['slug'] = Str::slug($request->input('slug'));
+
+        $category->update($categoty_data);
+
+        session()->flash('cls', 'success');
+        session()->flash('msg', 'Category Updated Successfully');
+
+        return redirect()->route('category.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Category  $ctageory
+     * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $ctageory)
+    public function destroy(Category $category)
     {
-        //
+        $category->delete();
+
+        session()->flash('cls', 'danger');
+        session()->flash('msg', 'Category Deleted Successfully');
+
+        return redirect()->route('category.index');
     }
 }
