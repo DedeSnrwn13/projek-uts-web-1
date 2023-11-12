@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Backend\BackendController;
+use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Frontend\FrontendController;
 
 /*
@@ -21,8 +22,11 @@ Route::get("/", [FrontendController::class, 'index'])->name('front.index');
 Route::get('/single-post', [FrontendController::class, 'single'])->name('front.single');
 
 // Dashboard
-Route::prefix('dashboard')->name('back.')->middleware(['auth', 'verified'])->group(function () {
-    Route::get('/', [BackendController::class, 'index'])->name('index');
+Route::prefix('dashboard')->middleware(['auth'])->group(function () {
+    Route::get('/', [BackendController::class, 'index'])->name('back.index');
+
+    // Category
+    Route::resource('category', CategoryController::class);
 });
 
 Route::middleware('auth')->group(function () {
