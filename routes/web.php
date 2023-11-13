@@ -2,11 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Backend\TagController;
+use App\Http\Controllers\Backend\PostController;
 use App\Http\Controllers\Backend\BackendController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Frontend\FrontendController;
-use App\Http\Controllers\SubCategoryController;
-use App\Http\Controllers\TagController;
+use App\Http\Controllers\Backend\SubCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,8 +30,14 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
 
     // Category
     Route::resource('category', CategoryController::class);
+    // SubCategory
+    Route::get('get-subcategory/{id}', [SubCategoryController::class, 'getSubCategoryByCategoryId']);
     Route::resource('sub-category', SubCategoryController::class);
+    // Tag
     Route::resource('tag', TagController::class);
+    // Post
+    Route::resource('post', PostController::class);
+
 });
 
 Route::middleware('auth')->group(function () {
