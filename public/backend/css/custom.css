@@ -1,0 +1,23 @@
+p {
+    margin: 0 !important;
+}
+
+hr {
+    margin: 5px !important;
+    color: darkcyan;
+}
+
+.post-table tr {
+    border-bottom: 1px solid black;
+}
+
+.post-table th, .post-table td {
+    vertical-align: middle !important;
+    text-align: center;
+    font-size: 13px;
+}
+
+.post-table td img {
+    width: 75px;
+    cursor: pointer;
+}
