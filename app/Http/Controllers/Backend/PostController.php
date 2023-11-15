@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PostCreateRequest;
+use App\Http\Requests\PostUpdateRequest;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -35,8 +37,9 @@ class PostController extends Controller
     {
         $categories = Category::where('status', 1)->pluck('name', 'id');
         $tags = Tag::where('status', 1)->select('name','id')->get();
+        $selected_tags = [];
 
-        return view('backend.modules.post.create', compact('categories', 'tags'));
+        return view('backend.modules.post.create', compact('categories', 'tags', 'selected_tags'));
     }
 
     /**
@@ -68,6 +71,8 @@ class PostController extends Controller
 
         $post = Post::create($post_data);
         $post->tag()->attach($request->input('tag_ids'));
+
+        return redirect()->route('post.index');
     }
 
     /**
@@ -91,7 +96,11 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        $categories = Category::where('status', 1)->pluck('name', 'id');
+        $tags = Tag::where('status', 1)->select('name','id')->get();
+        $selected_tags = DB::table('post_tag')->where('post_id', $post->id)->pluck('tag_id')->toArray();
+
+        return view('backend.modules.post.edit', compact('post', 'categories', 'tags', 'selected_tags'));
     }
 
     /**
@@ -101,9 +110,33 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(PostUpdateRequest $request, Post $post)
     {
-        //
+        $post_data = $request->except(['tag_ids', 'photo', 'slug']);
+        $post_data['slug'] = Str::slug($request->input('slug'));
+        $post_data['user_id'] = Auth::user()->id;
+        $post_data['is_approved'] = 1;
+
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $name = Str::slug($request->input('slug'));
+            $height = 400;
+            $width = 1000;
+            $thumb_height = 150;
+            $thumb_width = 300;
+            $path = 'images/post/original/';
+            $thumb_path = 'images/post/thumbnail/';
+
+            (new PhotoUploadController())->imageUnlink($path, $post->photo);
+            (new PhotoUploadController())->imageUnlink($thumb_path, $post->photo);
+            $post_data['photo'] = (new PhotoUploadController())->imageUpload($name, $height, $width, $path, $file);
+            (new PhotoUploadController())->imageUpload($name, $thumb_height, $thumb_width, $thumb_path, $file);
+        }
+
+        $post->update($post_data);
+        $post->tag()->sync($request->input('tag_ids'));
+
+        return redirect()->route('post.index');
     }
 
     /**

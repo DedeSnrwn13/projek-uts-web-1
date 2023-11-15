@@ -83,7 +83,7 @@
                                                 $classes = ['btn-success', 'btn-info', 'btn-danger', 'btn-warning', 'btn-dark'];
                                             @endphp
                                             @foreach ($post->tag as $tag)
-                                                <a href="{{ route('tag.show', $tag->id) }}">
+                                                <a class="text-decoration-none" href="{{ route('tag.show', $tag->id) }}">
                                                     <button class="btn btn-sm {{ $classes[random_int(0, 4)] }} mb-1">{{ $tag->name }}</button>
                                                 </a>
                                             @endforeach

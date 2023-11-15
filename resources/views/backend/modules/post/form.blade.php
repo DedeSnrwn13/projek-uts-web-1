@@ -43,12 +43,18 @@
 <div class="row">
     @foreach ($tags as $tag)
         <div class="col-md-3">
-            {!! Form::checkbox('tag_ids[]', $tag->id, false) !!} <span>{{ $tag->name }}</span>
+            {!! Form::checkbox('tag_ids[]', $tag->id, in_array($tag->id, $selected_tags)) !!} <span>{{ $tag->name }}</span>
         </div>
     @endforeach
 </div>
 {!! Form::label('photo', 'Select Photo', ['class' => 'mt-2']) !!}
 {!! Form::file('photo', ['class' => 'form-control']) !!}
+
+@if (Route::currentRouteName() == 'post.edit')
+    <div class="my-3">
+        <img class="img-thumbnail post_image" src="{{ url('images/post/original/'.$post->photo) }}" alt="">
+    </div>
+@endif
 
 @push('css')
     <style>
@@ -73,22 +79,49 @@
     </script>
 
     <script>
-        $('#category_id').on('change', function() {
-            let category_id = $(this).val();
+        const get_sub_category = (category_id) => {
+            let route_name = '{{ Route::currentRouteName() }}';
             let sub_category_element = $('#sub_category_id');
             sub_category_element.empty();
-            sub_category_element.append('<option selected>Select sub category</option>');
+            let sub_category_select = '';
+            if (route_name != 'post.edit') {
+                sub_category_select = 'selected';
+            }
+            sub_category_element.append(`<option ${sub_category_select}>Select sub category</option>`);
 
             axios.get(window.location.origin + '/dashboard/get-subcategory/' + category_id).then(res => {
                 let sub_categories = res.data;
 
-                sub_categories.map((sub_category, index) => (
-                    sub_category_element.append(
-                        `<option value="${sub_category.id}"> ${sub_category.name} </option>`)
-                ));
+                sub_categories.map((sub_category, index) => {
+                    let selected = '';
+
+                    if (route_name == 'post.edit') {
+                        let sub_category_id = '{{ $post->sub_category_id ?? null }}';
+
+                        if (sub_category_id == sub_category.id) {
+                            selected = 'selected';
+                        }
+                    }
+
+                    return sub_category_element.append(
+                        `<option ${selected} value="${sub_category.id}"> ${sub_category.name} </option>`)
+                });
             }).catch(err => {
                 console.log(err);
             });
+        }
+
+        get_sub_category(1);
+
+        $('#category_id').on('change', function() {
+            let category_id = $('#category_id').val();
+            get_sub_category(category_id);
         });
     </script>
+
+    @if (Route::currentRouteName() == 'post.edit')
+        <script>
+            get_sub_category('{{ $post->category_id }}');
+        </script>
+    @endif
 @endpush
