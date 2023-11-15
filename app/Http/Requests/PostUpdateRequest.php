@@ -25,7 +25,7 @@ class PostUpdateRequest extends FormRequest
     {
         return [
             'title' => 'required|min:3|max:255',
-            'slug' => 'required|min:3|max:255|unique:posts,slug,'.$this->id,
+            'slug' => 'required|min:3|max:255|unique:posts,slug,'.$this->post->id,
             'status' => 'required',
             'category_id' => 'required|exists:categories,id',
             'sub_category_id' => 'required|exists:sub_categories,id',

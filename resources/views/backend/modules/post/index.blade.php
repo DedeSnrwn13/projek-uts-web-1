@@ -74,8 +74,8 @@
                                         </td>
                                         <td>
                                             <img class="img-thumbnail post_image"
-                                                data-src="{{ url('images/post/original/' . $post->photo) }}"
-                                                src="{{ url('images/post/thumbnail/' . $post->photo) }}"
+                                                data-src="{{ $post->photo }}"
+                                                src="{{ $post->photo }}"
                                                 alt="{{ $post->title }}">
                                         </td>
                                         <td>

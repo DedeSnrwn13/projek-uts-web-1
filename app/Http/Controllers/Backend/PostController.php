@@ -65,13 +65,16 @@ class PostController extends Controller
             $path = 'images/post/original/';
             $thumb_path = 'images/post/thumbnail/';
 
-            $post_data['photo'] = (new PhotoUploadController())->imageUpload($name, $height, $width, $path, $file);
+            $image_name = (new PhotoUploadController())->imageUpload($name, $height, $width, $path, $file);
+            $post_data['photo'] = url('images/post/original/' . $image_name);
             (new PhotoUploadController())->imageUpload($name, $thumb_height, $thumb_width, $thumb_path, $file);
         }
 
         $post = Post::create($post_data);
         $post->tag()->attach($request->input('tag_ids'));
 
+        session()->flash('cls', 'success');
+        session()->flash('msg', 'Post Created Successfully');
         return redirect()->route('post.index');
     }
 
@@ -136,6 +139,8 @@ class PostController extends Controller
         $post->update($post_data);
         $post->tag()->sync($request->input('tag_ids'));
 
+        session()->flash('cls', 'success');
+        session()->flash('msg', 'Post Updated Successfully');
         return redirect()->route('post.index');
     }
 
@@ -147,6 +152,15 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $path = 'images/post/original/';
+        $thumb_path = 'images/post/thumbnail/';
+        (new PhotoUploadController())->imageUnlink($path, $post->photo);
+        (new PhotoUploadController())->imageUnlink($thumb_path, $post->photo);
+
+        $post->delete();
+
+        session()->flash('cls', 'warning');
+        session()->flash('msg', 'Post Deleted Successfully');
+        return redirect()->route('post.index');
     }
 }
