@@ -1,0 +1,32 @@
+.sidebar-sub-category {
+    padding-left: 20px;
+}
+
+.sidebar-sub-category li {
+    padding: 5px;
+    margin-bottom: 0;
+}
+
+.sidebar-sub-category li a {
+    font-size: 14px !important;
+    color: gray !important;
+}
+
+.sidebar-sub-category li a:hover {
+    color: #f48840 !important;
+}
+
+.read-more-button {
+    font-size: 12px;
+    border: 1px solid silver;
+    background: silver;
+    border-radius: 5px;
+    padding: 0 10px;
+    transition: .3s all ease-in-out;
+}
+
+.read-more-button:hover {
+    color: #f48840;
+    border: 1px solid #f48840;
+    background: white;
+}

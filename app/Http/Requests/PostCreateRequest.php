@@ -28,10 +28,17 @@ class PostCreateRequest extends FormRequest
             'slug' => 'required|min:3|max:255|unique:posts,slug',
             'status' => 'required',
             'category_id' => 'required|exists:categories,id',
-            'sub_category_id' => 'required|exists:sub_categories,id',
+            'sub_category_id' => 'required|exists:sub_categories,id|numeric',
             'description' => 'required|min:20',
             'photo' => 'required',
             'tag_ids' => 'required'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'sub_category_id.numeric' => 'Please selet sub category'
         ];
     }
 }

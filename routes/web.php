@@ -22,7 +22,10 @@ use App\Http\Controllers\Backend\SubCategoryController;
 
 // Front
 Route::get("/", [FrontendController::class, 'index'])->name('front.index');
-Route::get('/single-post', [FrontendController::class, 'single'])->name('front.single');
+Route::get("/category/{slug}", [FrontendController::class, 'index'])->name('front.category');
+Route::get("/category/{cat_slug}/{sub_cat_slug}", [FrontendController::class, 'index'])->name('front.sub_category');
+Route::get("/tag/{slug}", [FrontendController::class, 'index'])->name('front.tag');
+Route::get('/single-post/{slug}', [FrontendController::class, 'single'])->name('front.single');
 
 // Dashboard
 Route::prefix('dashboard')->middleware(['auth'])->group(function () {
@@ -31,7 +34,6 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     // Category
     Route::resource('category', CategoryController::class);
     // SubCategory
-    Route::get('get-subcategory/{id}', [SubCategoryController::class, 'getSubCategoryByCategoryId']);
     Route::resource('sub-category', SubCategoryController::class);
     // Tag
     Route::resource('tag', TagController::class);

@@ -27,9 +27,12 @@
     </div>
     <div class="col-md-6">
         {!! Form::label('sub_category_id', 'Select Sub Category', ['class' => 'mt-2']) !!}
-        <select name="sub_category_id" id="sub_category_id" class="form-select">
+        <select name="sub_category_id" id="sub_category_id" class="form-select @error('sub_category_id') is-invalid @enderror">
             <option selected>Select sub category</option>
         </select>
+        @error('sub_category_id')
+            <p class="text-danger">{{ $message }}</p>
+        @enderror
     </div>
 </div>
 {!! Form::label('description', 'Description', ['class' => 'mt-2']) !!}
@@ -89,7 +92,7 @@
             }
             sub_category_element.append(`<option ${sub_category_select}>Select sub category</option>`);
 
-            axios.get(window.location.origin + '/dashboard/get-subcategory/' + category_id).then(res => {
+            axios.get(window.location.origin + '/api/get-subcategory/' + category_id).then(res => {
                 let sub_categories = res.data;
 
                 sub_categories.map((sub_category, index) => {

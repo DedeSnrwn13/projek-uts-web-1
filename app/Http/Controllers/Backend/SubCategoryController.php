@@ -130,11 +130,4 @@ class SubCategoryController extends Controller
 
         return redirect()->route('sub-category.index');
     }
-
-    public function getSubCategoryByCategoryId(int $id)
-    {
-        $sub_categories = SubCategory::select('id', 'name')->where('status', 1)->where('category_id', $id)->get();
-
-        return response()->json($sub_categories);
-    }
 }
