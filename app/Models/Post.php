@@ -31,4 +31,9 @@ class Post extends Model
     {
         return $this->belongsTo(SubCategory::class);
     }
+
+    public function comment()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\BackendController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Backend\SubCategoryController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,7 +42,8 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::resource('tag', TagController::class);
     // Post
     Route::resource('post', PostController::class);
-
+    // Comment
+    Route::resource('comment', CommentController::class);
 });
 
 Route::middleware('auth')->group(function () {

@@ -55,7 +55,7 @@
 
 @if (Route::currentRouteName() == 'post.edit')
     <div class="my-3">
-        <img class="img-thumbnail post_image" src="{{ url('images/post/original/'.$post->photo) }}" alt="">
+        <img class="img-thumbnail post_image" src="{{ $post->photo }}" alt="">
     </div>
 @endif
 
@@ -100,6 +100,8 @@
 
                     if (route_name == 'post.edit') {
                         let sub_category_id = '{{ $post->sub_category_id ?? null }}';
+
+                        console.log(sub_category_id);
 
                         if (sub_category_id == sub_category.id) {
                             selected = 'selected';

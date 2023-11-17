@@ -15,7 +15,7 @@
                             <ul class="post-info">
                                 <li><a href="#">{{ $slider_post->user?->name }}</a></li>
                                 <li><a href="#">{{ $slider_post->created_at->format('M d, Y') }}</a></li>
-                                <li><a href="#">12 Comments</a></li>
+                                <li><a href="#">{{ $slider_post->comment->count() }} Comments</a></li>
                             </ul>
                         </div>
                     </div>

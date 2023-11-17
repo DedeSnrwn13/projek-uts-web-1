@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Models\Tag;
 use App\Models\Post;
 use App\Models\Category;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\SubCategory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class FrontendController extends Controller
 {
     public function index()
     {
-        $query = Post::with('category', 'sub_category', 'tag', 'user')->where('is_approved', 1)
+        $query = Post::with('category', 'sub_category', 'tag', 'user', 'comment')->where('is_approved', 1)
             ->where('status', 1);
         $posts = $query->latest()->take(5)->get();
         $slider_posts = $query->inRandomOrder()->take(6)->get();
@@ -20,9 +22,12 @@ class FrontendController extends Controller
         return view('frontend.modules.index', compact('posts', 'slider_posts'));
     }
 
-    public function single()
+    public function single(string $slug)
     {
-        return view('frontend.modules.single');
+        $post = Post::with('category', 'sub_category', 'tag', 'user', 'comment', 'comment.user')->where('is_approved', 1)
+            ->where('status', 1)->where('slug', $slug)->firstOrFail();
+
+        return view('frontend.modules.single', compact('post'));
     }
 
     public function all_post()
@@ -45,7 +50,7 @@ class FrontendController extends Controller
         return view('frontend.modules.all_post', compact('posts', 'title', 'sub_title'));
     }
 
-    public function category($slug)
+    public function category(string $slug)
     {
         $category = Category::where('slug', $slug)->first();
 
@@ -60,7 +65,7 @@ class FrontendController extends Controller
         return view('frontend.modules.all_post', compact('posts', 'title', 'sub_title'));
     }
 
-    public function sub_category($slug, $sub_clug)
+    public function sub_category(string $slug, string $sub_clug)
     {
         $sub_category = SubCategory::where('slug', $sub_clug)->first();
 
@@ -75,18 +80,21 @@ class FrontendController extends Controller
         return view('frontend.modules.all_post', compact('posts', 'title', 'sub_title'));
     }
 
-    public function tag($slug)
+    public function tag(string $slug)
     {
-        // $category = Category::where('slug', $slug)->first();
+        $tag = Tag::where('slug', $slug)->first();
 
-        // if ($category) {
-        //     $posts = Post::with('category', 'sub_category', 'tag', 'user')->where('is_approved', 1)
-        //         ->where('status', 1)->where('category_id', $category->id)->latest()->paginate(10);
-        // }
+        $post_ids = DB::table('post_tag')->where('tag_id', $tag->id)->distinct('post_id')->pluck('post_id');
 
-        // $title = $category->name;
-        // $sub_title = 'Post By Category';
+        if ($tag) {
+            $posts = Post::with('category', 'sub_category', 'tag', 'user')
+                ->where('is_approved', 1)->where('status', 1)->whereIn('id', $post_ids)
+                ->latest()->paginate(10);
+        }
 
-        // return view('frontend.modules.all_post', compact('posts', 'title', 'sub_title'));
+        $title = $tag->name;
+        $sub_title = 'Post By Tag';
+
+        return view('frontend.modules.all_post', compact('posts', 'title', 'sub_title'));
     }
 }
