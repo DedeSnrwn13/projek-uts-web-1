@@ -1,9 +1,22 @@
 @extends('frontend.layouts.master')
 
-@section('title', 'Welcome')
+@section('title', $title)
 
 @section('banner')
-    @include('frontend.includes.banner')
+    <div class="heading-page header-text">
+        <section class="page-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-content">
+                            <h4>{{ $title }}</h4>
+                            <h2>{{ $sub_title }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 @endsection
 
 @section('content')
@@ -14,7 +27,7 @@
                     <img src="{{ $post->photo }}" alt="{{ $post->title }}">
                 </div>
                 <div class="down-content">
-                    <span>{{ $post->category?->name }}</span>
+                    <span>{{ $post->category?->name }} <sub class="text-warning"><small>{{ $post->sub_category?->name }}</small></sub></span>
                     <a href="{{ route('front.single', $post->slug) }}">
                         <h4>{{ $post->title }}</h4>
                     </a>
@@ -52,9 +65,12 @@
             </div>
         </div>
     @endforeach
+
+    @if (count($posts) < 1)
+        <h3 class="text-center text-danger">No Post Found</h3>
+    @endif
+
     <div class="col-lg-12">
-        <div class="main-button">
-            <a href="{{ route('front.all_post') }}">View All Posts</a>
-        </div>
+        {{ $posts->links() }}
     </div>
 @endsection

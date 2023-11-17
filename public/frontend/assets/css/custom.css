@@ -30,3 +30,8 @@
     border: 1px solid #f48840;
     background: white;
 }
+
+.item img {
+    width: 100%;
+    height: 300px;
+}
