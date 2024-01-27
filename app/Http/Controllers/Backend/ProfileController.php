@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Models\Profile;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Laravolt\Indonesia\Models\City;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Redirect;
-use App\Http\Requests\ProfileUpdateRequest;
-use App\Models\Profile;
-use Laravolt\Indonesia\Models\City;
+use Laravolt\Indonesia\Models\Village;
 use Laravolt\Indonesia\Models\District;
 use Laravolt\Indonesia\Models\Province;
-use Laravolt\Indonesia\Models\Village;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Controllers\PhotoUploadController;
 
 class ProfileController extends Controller
 {
@@ -40,8 +43,7 @@ class ProfileController extends Controller
             'province_code' => 'required',
             'city_code' => 'required',
             'district_code' => 'required',
-            'village_code' => 'required',
-            'photo' => 'nullable|image'
+            'village_code' => 'required'
         ]);
 
         $profile_data = $request->all();
@@ -95,5 +97,38 @@ class ProfileController extends Controller
         $villages = Village::select('name', 'code')->where('district_code', $district_code)->get();
 
         return response()->json($villages);
+    }
+
+    public function uploadPhoto(Request $request)
+    {
+        $file = $request->input('photo');
+        $name = Str::slug(Auth::user()->name . Carbon::now());
+        $height = 200;
+        $width = 200;
+        $path = 'images/user/';
+
+        $profile = Profile::where('user_id', Auth::id())->first();
+        if ($profile?->photo) {
+            (new PhotoUploadController())->imageUnlink($path, $profile->photo);
+        }
+
+        $image_name = (new PhotoUploadController())->imageUpload($name, $height, $width, $path, $file);
+
+        $profile_data['photo'] = $image_name;
+
+        if ($profile) {
+            $profile->update($profile_data);
+
+            return response()->json([
+                'msg' => 'Profile photo updated successfully',
+                'cls' => 'success',
+                'photo' => url($path . $profile->photo)
+            ]);
+        }
+
+        return response()->json([
+            'msg' => 'Please upload a photo first',
+            'cls' => 'warning',
+        ]);
     }
 }

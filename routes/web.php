@@ -53,6 +53,8 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::resource('comment', CommentController::class);
     // Profile
     Route::resource('profile', BackendProfileController::class);
+
+    Route::post('/upload-photo', [BackendProfileController::class, 'uploadPhoto']);
 });
 
 Route::middleware('auth')->group(function () {

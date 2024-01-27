@@ -72,8 +72,17 @@
                     <h4 class="mb-0">Profile Photo</h4>
                 </div>
                 <div class="card-body">
-                    <label for="">Upload Profile Photo</label>
-                    <input type="file" class="form-control" name="" id="">
+                    <img id="previous_photo" src="{{ asset('images/user/' . $profile->photo) }}" class="img-thumbnail mb-2" style="{{ $profile->photo != null ? '' : 'display: none' }}">
+                    <label for="image_input">Upload Profile Photo</label>
+
+                    <form>
+                        <input type="file" class="form-control mt-3" name="image_input" id="image_input">
+                        <button type="reset" class="d-none" id="reset"></button>
+                    </form>
+
+                    <p id="error_message" class="text-danger"></p>
+                    <button class="btn btn-success my-3 w-100" id="image_upload_button">Upload</button>
+                    <img class="img-thumbnail" id="image_preview">
                 </div>
             </div>
         </div>
@@ -90,6 +99,72 @@
 
 @push('js')
     <script>
+        let photo;
+
+        $('#image_input').on('change', function (e) {
+            let file = e.target.files[0];
+            let reader = new FileReader();
+
+            reader.onloadend = () => {
+                photo = reader.result;
+                $('#image_preview').attr('src', photo);
+            }
+
+            reader.readAsDataURL(file);
+        });
+
+        let is_loading = false;
+
+        const handleLoading = () => {
+            if (is_loading) {
+                $('#image_upload_button').html(`
+                    <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                `);
+            } else {
+                $('#image_upload_button').html(`Upload`);
+            }
+        }
+
+        $('#image_upload_button').on('click', function () {
+            if (photo != undefined) {
+                let is_loading = true;
+                handleLoading();
+
+                $('#error_message').text('');
+
+                axios.post(`${window.location.origin}/dashboard/upload-photo`, {
+                    photo: photo
+                }).then(res => {
+                    is_loading = false;
+                    handleLoading();
+
+                    let response = res.data;
+
+                    $('#reset').trigger('click');
+
+                    $('#previous_photo').attr('src', response.photo).show();
+                    $('#image_preview').attr('src', '');
+
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: response.cls,
+                        toast: true,
+                        title: response.msg,
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                }).catch(res => {
+
+                });
+            } else {
+                is_loading = false;
+                handleLoading();
+                $('#error_message').text('Please select a photo');
+            }
+        });
+
         const getCities = (province_code, selected = null) => {
             axios.get(`${window.location.origin}/get-cities/${province_code}`)
                 .then(res => {

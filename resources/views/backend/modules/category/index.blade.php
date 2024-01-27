@@ -100,7 +100,6 @@
         <script>
             $('.delete').on('click', function() {
                 let id = $(this).attr('data-id');
-                console.log(id);
 
                 Swal.fire({
                     title: "Are you sure to delete?",
