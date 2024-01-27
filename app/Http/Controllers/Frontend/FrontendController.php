@@ -24,7 +24,7 @@ class FrontendController extends Controller
 
     public function single(string $slug)
     {
-        $post = Post::with('category', 'sub_category', 'tag', 'user', 'comment', 'comment.user')->where('is_approved', 1)
+        $post = Post::with('category', 'sub_category', 'tag', 'user', 'comment', 'comment.user', 'comment.reply')->where('is_approved', 1)
             ->where('status', 1)->where('slug', $slug)->firstOrFail();
 
         return view('frontend.modules.single', compact('post'));
@@ -96,5 +96,10 @@ class FrontendController extends Controller
         $sub_title = 'Post By Tag';
 
         return view('frontend.modules.all_post', compact('posts', 'title', 'sub_title'));
+    }
+
+    public function contact_us()
+    {
+        return view('frontend.modules.contact_us');
     }
 }

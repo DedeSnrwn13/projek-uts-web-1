@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
+use App\Models\Contact;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class CommentController extends Controller
+class ContactController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,27 +36,27 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'post_id' => 'required|exists:posts,id',
-            'comment' => 'required|string|min:15|max:1000'
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required|numeric',
+            'subject' => 'required',
+            'message' => 'required'
         ]);
 
-        $comment_data = $request->all();
-        $comment_data['status'] = 1;
-        $comment_data['user_id'] = Auth::id();
-
-        $comment = Comment::create($comment_data);
+        $contact = Contact::create($request->all());
         session()->flash('cls', 'success');
-        session()->flash('msg', 'Your Comment Posted Successfully');
+        session()->flash('msg', 'Your Message Sent Successfully');
+
         return redirect()->back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
-    public function show(Comment $comment)
+    public function show(Contact $contact)
     {
         //
     }
@@ -65,10 +64,10 @@ class CommentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
-    public function edit(Comment $comment)
+    public function edit(Contact $contact)
     {
         //
     }
@@ -77,10 +76,10 @@ class CommentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, Contact $contact)
     {
         //
     }
@@ -88,10 +87,10 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Comment  $comment
+     * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comment $comment)
+    public function destroy(Contact $contact)
     {
         //
     }

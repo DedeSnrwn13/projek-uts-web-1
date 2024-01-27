@@ -43,3 +43,16 @@
 .swal2-container.swal2-top-end.swal2-backdrop-show {
     z-index: 99999 !important;
 }
+
+.author-thumb img {
+    width: 75px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+}
+
+.blog-posts .comments ul li .right-content {
+    margin-right: 100px !important;
+}

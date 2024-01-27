@@ -15,4 +15,9 @@ class Comment extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function reply()
+    {
+        return $this->hasMany(__CLASS__);
+    }
 }

@@ -75,17 +75,26 @@
                             <div class="right-content">
                                 <h4>{{ $comment->user?->name }}<span>{{ $comment->created_at->format('M d, Y') }}</span></h4>
                                 <p>{{ $comment->comment }}</p>
+                                <h6>Write Reply</h6>
+                                {!! Form::open(['method'=>'post', 'route'=>'comment.store']) !!}
+                                {!! Form::hidden('post_id', $post->id) !!}
+                                {!! Form::hidden('comment_id', $comment->id) !!}
+                                {!! Form::text('comment', null, ['class'=>'form-control form-control-sm mt-2', 'placeholder'=>'Write your reply']) !!}
+                                {!! Form::button('Reply', ['class'=>'btn btn-outline-success btn-sm mt-2', 'type'=>'submit']) !!}
+                                {!! Form::close() !!}
                             </div>
                         </li>
-                        <li class="replied">
-                            {{-- <div class="author-thumb">
-                                <img src="{{ asset('frontend/assets/images/comment-author-02.jpg') }}" alt="">
-                            </div>
-                            <div class="right-content">
-                                <h4>Dede Sunarwan<span>Nov 17, 2023</span></h4>
-                                <p>Ini Masih Text Dummy</p>
-                            </div> --}}
-                        </li>
+                        @foreach ($comment->reply as $reply)
+                            <li class="replied">
+                                <div class="author-thumb">
+                                    <img src="{{ asset('frontend/assets/images/comment-author-02.jpg') }}" alt="">
+                                </div>
+                                <div class="right-content">
+                                    <h4>{{ $reply->user?->name }}<span>{{ $reply->created_at->format('M d, Y') }}</span></h4>
+                                    <p>{{ $reply->comment }}</p>
+                                </div>
+                            </li>
+                        @endforeach
                     @endforeach
                 </ul>
             </div>
@@ -103,7 +112,7 @@
                             @csrf
 
                             <input type="hidden" value="{{ $post->id }}" name="post_id">
-                            <textarea name="comment" rows="6" placeholder="Type your comment" required="required"></textarea>
+                            <textarea class="form-control border" name="comment" rows="6" placeholder="Type your comment" required="required"></textarea>
                             <button type="submit" class="main-button">Submit</button>
                         </form>
                     </div>
