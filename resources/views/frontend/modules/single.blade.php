@@ -121,6 +121,19 @@
         </div>
     </div>
 
+    @push('js')
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script>
+            const readCount = () => {
+                axios.get(window.location.origin + '/post-count/' + {{ $post->id }})
+            }
+
+            setTimeout(() => {
+                readCount();
+            }, 10000);
+        </script>
+    @endpush
+
     @if (session('msg'))
         @php
             $cls = session('cls') == 'danger' ? 'error' : session('cls');

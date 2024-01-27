@@ -11,6 +11,7 @@ use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\PostCountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,7 @@ Route::post('/contact-us', [ContactController::class, 'store'])->name('contact.s
 Route::get('/get-cities/{province_code}', [BackendProfileController::class, 'getCity']);
 Route::get('/get-districts/{city_code}', [BackendProfileController::class, 'getDistrict']);
 Route::get('/get-villages/{district_code}', [BackendProfileController::class, 'getVillage']);
+Route::get('post-count/{post_id}', [FrontendController::class, 'postReadCount']);
 
 // Dashboard
 Route::prefix('dashboard')->middleware(['auth'])->group(function () {
