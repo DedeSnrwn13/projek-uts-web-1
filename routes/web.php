@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\TagController;
 use App\Http\Controllers\Backend\PostController;
 use App\Http\Controllers\Backend\BackendController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\ProfileController as BackendProfileController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\CommentController;
@@ -32,6 +33,9 @@ Route::get('/tag/{slug}', [FrontendController::class, 'tag'])->name('front.tag')
 Route::get('/single-post/{slug}', [FrontendController::class, 'single'])->name('front.single');
 Route::get('/contact-us', [FrontendController::class, 'contact_us'])->name('front.contact');
 Route::post('/contact-us', [ContactController::class, 'store'])->name('contact.store');
+Route::get('/get-cities/{province_code}', [BackendProfileController::class, 'getCity']);
+Route::get('/get-districts/{city_code}', [BackendProfileController::class, 'getDistrict']);
+Route::get('/get-villages/{district_code}', [BackendProfileController::class, 'getVillage']);
 
 // Dashboard
 Route::prefix('dashboard')->middleware(['auth'])->group(function () {
@@ -47,6 +51,8 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::resource('post', PostController::class);
     // Comment
     Route::resource('comment', CommentController::class);
+    // Profile
+    Route::resource('profile', BackendProfileController::class);
 });
 
 Route::middleware('auth')->group(function () {
