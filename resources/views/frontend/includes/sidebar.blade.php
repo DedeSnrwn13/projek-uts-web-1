@@ -14,7 +14,7 @@
             <div class="col-lg-12">
                 <div class="sidebar-item recent-posts">
                     <div class="sidebar-heading">
-                        <h2>Recent Posts</h2>
+                        <h2>{{ __('Recent Posts') }}</h2>
                     </div>
                     <div class="content">
                         <ul>
@@ -33,7 +33,7 @@
             <div class="col-lg-12">
                 <div class="sidebar-item categories">
                     <div class="sidebar-heading">
-                        <h2>Categories</h2>
+                        <h2>{{ __('Categories') }}</h2>
                     </div>
                     <div class="content">
                         <ul>
@@ -54,7 +54,7 @@
             <div class="col-lg-12">
                 <div class="sidebar-item tags">
                     <div class="sidebar-heading">
-                        <h2>Tag Clouds</h2>
+                        <h2>{{ __('Tags') }}</h2>
                     </div>
                     <div class="content">
                         <ul>

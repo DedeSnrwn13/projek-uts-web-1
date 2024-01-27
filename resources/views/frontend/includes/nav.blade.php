@@ -11,20 +11,55 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{{ route('front.index') }}">Home
+                        <a class="nav-link" href="{{ route('front.index') }}">{{ __('Home') }}
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">{{ __('About Us') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">{{ __('Blog') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('front.contact') }}">{{ __('Contact Us') }}</a>
+                    </li>
                     @if (!Auth::user())
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">Login</a>
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">Register</a>
+                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                         </li>
                     @endif
                 </ul>
             </div>
         </div>
+
+        <div class="switch-language me-5">
+            <form method="GET" id="switch_language_form">
+                <select class="form-select form-select-sm" name="lang" id="switch_language">
+                    <option value="en">EN</option>
+                    <option value="id">ID</option>
+                </select>
+            </form>
+        </div>
     </nav>
 </header>
+
+@push('js')
+    <script>
+        if (localStorage.lang == 'id') {
+            $('#switch_language').val('id');
+        } else {
+            $('#switch_language').val('en');
+        }
+
+        $('#switch_language').on('change', function (e) {
+            e.preventDefault();
+
+            localStorage.lang = $(this).val();
+            $('#switch_language_form').submit();
+        });
+    </script>
+@endpush

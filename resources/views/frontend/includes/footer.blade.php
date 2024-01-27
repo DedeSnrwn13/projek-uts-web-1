@@ -13,9 +13,9 @@
             <div class="col-lg-12">
                 <div class="copyright-text">
                     <p>
-                        Copyright {{ date('Y') }} @BLOG D. | Design & Develop By: <a rel="nofollow" href="https://github.com/DedeSnrwn13" target="_parent">Dede Sunarwan</a>
+                        {{ __('Copyright') }} {{ date('Y') }} @BLOG D. | {{ __('Design & Developed By') }}: <a rel="nofollow" href="https://github.com/DedeSnrwn13" target="_parent">Dede Sunarwan</a>
                     </p>
-                    <small class="text-white">Template By: <a href="https://templatemo.com/tm-551-stand-blog" class="text-warning">templatemo.com</a></small>
+                    <small class="text-white">{{ __('Template By') }}: <a href="https://templatemo.com/tm-551-stand-blog" class="text-warning">templatemo.com</a></small>
                 </div>
             </div>
         </div>

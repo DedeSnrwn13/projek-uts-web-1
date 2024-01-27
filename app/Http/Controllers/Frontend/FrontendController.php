@@ -25,7 +25,7 @@ class FrontendController extends Controller
 
     public function single(string $slug)
     {
-        $post = Post::with('category', 'sub_category', 'tag', 'user', 'comment', 'comment.user', 'comment.reply')->where('is_approved', 1)
+        $post = Post::with('category', 'sub_category', 'tag', 'user', 'comment', 'comment.user', 'comment.reply', 'post_read_count')->where('is_approved', 1)
             ->where('status', 1)->where('slug', $slug)->firstOrFail();
 
         return view('frontend.modules.single', compact('post'));
@@ -108,5 +108,16 @@ class FrontendController extends Controller
     {
         $postCount = new PostCountController($post_id);
         $postCount->postReadCount();
+    }
+
+    public function switchLanguage(Request $request)
+    {
+        if ($request->input('lang') === 'id') {
+            app()->setLocale('id');
+        } else {
+            app()->setLocale('en');
+        }
+
+        return redirect()->back();
     }
 }

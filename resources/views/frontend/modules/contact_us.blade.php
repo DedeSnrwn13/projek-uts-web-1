@@ -9,8 +9,8 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="text-content">
-                            <h4>Feel free to contact us</h4>
-                            <h2>Contact Us</h2>
+                            <h4>{{ __('Feel free to contact us') }}</h4>
+                            <h2>{{ __('Contact Us') }}</h2>
                         </div>
                     </div>
                 </div>
@@ -23,7 +23,7 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h4>Contact us</h4>
+                <h4>{{ __('Contact us') }}</h4>
             </div>
             <div class="card-body">
                 @if ($errors->any())

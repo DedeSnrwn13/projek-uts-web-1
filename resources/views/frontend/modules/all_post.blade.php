@@ -34,12 +34,12 @@
                     <ul class="post-info">
                         <li><a href="#">{{ $post->user->name }}</a></li>
                         <li><a href="#">{{ $post->created_at->format('M d, Y') }}</a></li>
-                        <li><a href="#">12 Comments</a></li>
+                        <li><a href="#">{{ $post->comment->count() }} {{ __('Comments') }}</a></li>
                     </ul>
                     <p>
                         {{ strip_tags(substr($post->description, 0, 700)) . '...' }}
                         <a href="{{ route('front.single', $post->slug) }}">
-                            <button class="read-more-button">Read More</button>
+                            <button class="read-more-button">{{ __('Read More') }}</button>
                         </a>
                     </p>
                     <div class="post-options">
@@ -67,7 +67,7 @@
     @endforeach
 
     @if (count($posts) < 1)
-        <h3 class="text-center text-danger">No Post Found</h3>
+        <h3 class="text-center text-danger">{{ __('No Post Found') }}</h3>
     @endif
 
     <div class="col-lg-12">
