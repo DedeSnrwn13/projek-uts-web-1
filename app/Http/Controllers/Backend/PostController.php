@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PostCreateRequest;
 use App\Http\Requests\PostUpdateRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
@@ -23,7 +24,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('category', 'sub_category', 'user', 'tag')->latest()->paginate(20);
+        $query =  Post::with('category', 'sub_category', 'user', 'tag')->latest();
+
+        if (Auth::user()->role === User::USER) {
+            $posts = $query->where('user_id', Auth::id())->paginate(20);
+        }
+
+        $posts = $query->paginate(20);
 
         return view('backend.modules.post.index', compact('posts'));
     }
@@ -86,6 +93,10 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        if (Auth::user()->role == User::USER && $post->user_id !== Auth::id()) {
+            abort(403);
+        }
+
         $post->load(['category', 'sub_category', 'user', 'tag']);
 
         return view('backend.modules.post.show', compact('post'));

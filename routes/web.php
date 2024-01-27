@@ -40,21 +40,16 @@ Route::get('/get-villages/{district_code}', [BackendProfileController::class, 'g
 // Dashboard
 Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::get('/', [BackendController::class, 'index'])->name('back.index');
-
-    // Category
-    Route::resource('category', CategoryController::class);
-    // SubCategory
-    Route::resource('sub-category', SubCategoryController::class);
-    // Tag
-    Route::resource('tag', TagController::class);
-    // Post
     Route::resource('post', PostController::class);
-    // Comment
     Route::resource('comment', CommentController::class);
-    // Profile
     Route::resource('profile', BackendProfileController::class);
-
     Route::post('/upload-photo', [BackendProfileController::class, 'uploadPhoto']);
+
+    Route::middleware('admin')->group(function () {
+        Route::resource('category', CategoryController::class);
+        Route::resource('sub-category', SubCategoryController::class);
+        Route::resource('tag', TagController::class);
+    });
 });
 
 Route::middleware('auth')->group(function () {
