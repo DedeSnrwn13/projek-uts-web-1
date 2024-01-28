@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryListResource;
 
 class CategoryController extends Controller
 {
@@ -120,5 +121,57 @@ class CategoryController extends Controller
         session()->flash('msg', 'Category Deleted Successfully');
 
         return redirect()->route('category.index');
+    }
+
+    public function categoryList()
+    {
+        $categories = Category::latest()->get();
+
+        return CategoryListResource::collection($categories);
+    }
+
+    public function categoryDetails(int $id)
+    {
+        $category = Category::findOrFail($id);
+
+        return new CategoryListResource($category);
+    }
+
+    public function categoryStore(Request $request)
+    {
+        $this->validate($request, [
+            'name'=> 'required|min:3|max:255',
+            'slug' => 'required|min:3|max:255|unique:categories,slug',
+            'order_by' => 'required|numeric',
+            'status' => 'required'
+        ]);
+
+        Category::create($request->all());
+
+        return response()->json(['msg' => 'Category Created Succesfully']);
+    }
+
+    public function categoryUpdate(int $id, Request $request)
+    {
+        $category = Category::findOrFail($id);
+
+        $this->validate($request, [
+            'name'=> 'required|min:3|max:255',
+            'slug' => 'required|min:3|max:255|unique:categories,slug,' . $category->id,
+            'order_by' => 'required|numeric',
+            'status' => 'required'
+        ]);
+
+        $category->update($request->all());
+
+        return response()->json(['msg' => 'Category Updated Successfully']);
+    }
+
+    public function categoryDelete(int $id)
+    {
+        $category = Category::findOrFail($id);
+        $category->delete();
+
+        return response()->json(['msg' => 'Category Deleted Successfully']);
     }
 }

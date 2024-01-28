@@ -174,4 +174,10 @@ class PostController extends Controller
         session()->flash('msg', 'Post Deleted Successfully');
         return redirect()->route('post.index');
     }
+
+    public function postList()
+    {
+        $posts =  Post::with('category', 'sub_category', 'user', 'tag')->latest()->paginate(20);
+        return response()->json($posts);
+    }
 }

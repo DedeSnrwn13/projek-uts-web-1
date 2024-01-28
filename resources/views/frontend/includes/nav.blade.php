@@ -16,10 +16,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">{{ __('About Us') }}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">{{ __('Blog') }}</a>
+                        <a class="nav-link" href="{{ route('front.all_post') }}">{{ __('Blog') }}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('front.contact') }}">{{ __('Contact Us') }}</a>
