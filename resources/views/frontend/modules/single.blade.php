@@ -9,8 +9,8 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="text-content">
-                            <h4>Post Details</h4>
-                            <h2>Single blog post</h2>
+                            <h4>{{ __('Post Details') }}</h4>
+                            <h2>{{ __('Single blog post') }}</h2>
                         </div>
                     </div>
                 </div>
@@ -33,8 +33,8 @@
                 <ul class="post-info">
                     <li><a href="#">{{ $post->user?->name }}</a></li>
                     <li><a href="#">{{ $post->created_at->format('M d, Y') }}</a></li>
-                    <li><a href="#">{{ $post->comment->count() }} Comments</a></li>
-                    <li><a href="#">{{ $post->post_read_count?->count }} Read</a></li>
+                    <li><a href="#">{{ $post->comment->count() }} {{ __('Comments') }}</a></li>
+                    <li><a href="#">{{ $post->post_read_count?->count }} {{ __('Read') }}</a></li>
                 </ul>
                 <div class="post-description">
                     <p>{!! $post->description !!}</p>
@@ -64,7 +64,7 @@
     <div class="col-lg-12">
         <div class="sidebar-item comments">
             <div class="sidebar-heading">
-                <h2>{{ $post->comment->count() }} comments</h2>
+                <h2>{{ $post->comment->count() }} {{ __('comments') }}</h2>
             </div>
             <div class="content">
                 <ul>
@@ -76,7 +76,7 @@
                             <div class="right-content">
                                 <h4>{{ $comment->user?->name }}<span>{{ $comment->created_at->format('M d, Y') }}</span></h4>
                                 <p>{{ $comment->comment }}</p>
-                                <h6>Write Reply</h6>
+                                <h6>{{ __('Write Reply') }}</h6>
                                 {!! Form::open(['method'=>'post', 'route'=>'comment.store']) !!}
                                 {!! Form::hidden('post_id', $post->id) !!}
                                 {!! Form::hidden('comment_id', $comment->id) !!}
@@ -104,7 +104,7 @@
     <div class="col-lg-12">
         <div class="sidebar-item submit-comment">
             <div class="sidebar-heading">
-                <h2>Your comment</h2>
+                <h2>{{ __('Your comment') }}</h2>
             </div>
             <div class="content">
                 <div class="row">
@@ -113,8 +113,8 @@
                             @csrf
 
                             <input type="hidden" value="{{ $post->id }}" name="post_id">
-                            <textarea class="form-control border" name="comment" rows="6" placeholder="Type your comment" required="required"></textarea>
-                            <button type="submit" class="main-button">Submit</button>
+                            <textarea class="form-control border" name="comment" rows="6" placeholder="{{ __('Type your comment') }}" required="required"></textarea>
+                            <button type="submit" class="main-button">{{ __('Submit') }}</button>
                         </form>
                     </div>
                 </div>

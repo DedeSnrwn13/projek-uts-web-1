@@ -10,15 +10,15 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item @if (Route::currentRouteName() == 'front.index') active @endif">
                         <a class="nav-link" href="{{ route('front.index') }}">{{ __('Home') }}
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item @if (Route::currentRouteName() == 'front.all_post') active @endif">
                         <a class="nav-link" href="{{ route('front.all_post') }}">{{ __('Blog') }}</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item @if (Route::currentRouteName() == 'front.contact') active @endif">
                         <a class="nav-link" href="{{ route('front.contact') }}">{{ __('Contact Us') }}</a>
                     </li>
                     @if (!Auth::user())
