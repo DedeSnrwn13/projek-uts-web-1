@@ -12,6 +12,7 @@ use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PostCountController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +53,8 @@ Route::middleware('language')->group(function () {
             Route::resource('category', CategoryController::class);
             Route::resource('sub-category', SubCategoryController::class);
             Route::resource('tag', TagController::class);
+            Route::resource('user', UserController::class);
+            Route::get('user/export/pdf', [UserController::class, 'exportPdf'])->name('user.export.pdf');
         });
     });
 
